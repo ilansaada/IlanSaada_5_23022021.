@@ -29,19 +29,16 @@ main{
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        border-radius: 40px;
     }
    .container_panier_resume{
-       display: flex;
-       flex-direction: column;
-       justify-content: center;
-       align-items: center;
        margin: 10px;
    }
    .container_panier_resume_details{
-       background-color: mediumturquoise;
+       color: rgb(80, 80, 0);
    }
    .container_panier_resume_price{
-    background-color: palevioletred;
+    color: #26612b;
 }
    .container img{
        height: 200px;
@@ -76,18 +73,51 @@ main{
        display: flex;
        flex-direction: column;
    }
-   footer{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #5e5959;
-        height: 80px;
-        margin-top: 470px;
-    }
-   footer a {
-       color: white;
-   }
-   
+   .total_commande{
+    margin-top: 40px;
+}
+
+#formulaire_commande{
+    margin-top: 10px;
+    border: solid;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+form{
+    background-color: #ecb7b7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+form input{
+    border-radius: 10px;
+    height: 20px;
+}
+textarea{
+    width: 180px;
+    height: 20px;
+    border-radius: 10px;
+
+}
+#envoyer_formulaire{
+    margin-top: 10px;
+    padding: 10px;
+}
+
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #5e5959;
+    height: 80px;
+    margin-top: 470px;
+}
+footer a {
+color: white;
+}
+
    
    @media screen and (min-width: 600px){
        .container{

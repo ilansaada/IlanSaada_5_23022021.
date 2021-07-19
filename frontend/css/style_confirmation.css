@@ -1,0 +1,30 @@
+#container_confirmation{
+    display: flex;
+    flex-direction: column;
+    border: solid 2px;
+    border-radius: 10px;
+    padding: 10px;
+}
+body{
+    min-height: 100vh;
+    text-align: center;
+    margin: 0px;
+}
+main{ 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+   footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #5e5959;
+    height: 80px;
+    margin-top: 470px;
+}
+footer a {
+color: white;
+}
+
