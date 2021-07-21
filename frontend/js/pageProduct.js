@@ -48,11 +48,9 @@ fetch(`http://localhost:3000/api/cameras/${id}`)
         price: product.price / 100,
         productId: id,
       };
-      console.log(optionProduit);
       //le local storage
       //variable productInLocalStorage dans laquelle on met les keys et les values qui sont dans le local storage
       let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
-      console.log(productInLocalStorage);
       //fonction popup pour le client
       const popupconfirmation = () => {
         if (

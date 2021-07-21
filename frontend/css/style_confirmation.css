@@ -4,6 +4,7 @@
     border: solid 2px;
     border-radius: 10px;
     padding: 10px;
+    background-color: #ecb7b7;
 }
 body{
     min-height: 100vh;

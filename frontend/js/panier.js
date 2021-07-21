@@ -1,6 +1,5 @@
 //variable productInLocalStorage dans laquelle on met les keys et les values qui sont dans le local storage
 let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
-console.log(productInLocalStorage);
 
 //affichage des produits du panier
 const affichagePannier = document.querySelector("#container_panier");
@@ -21,7 +20,7 @@ if (productInLocalStorage === null || productInLocalStorage == 0) {
       produitPanier +
       `
       <div class="container_panier_resume">
-        <div class="container_panier_resume_details">Quantité 1 - ${productInLocalStorage[j].nomProduit}  Option : ${productInLocalStorage[j].option_Produit} id : ${productInLocalStorage[j].productId}</div>
+        <div class="container_panier_resume_details">Quantité 1 - ${productInLocalStorage[j].nomProduit}  Option : ${productInLocalStorage[j].option_Produit}</div>
         <div class="container_panier_resume_price">Prix : ${productInLocalStorage[j].price}€</div>
         <button class="btn_supprimer"><i class="fa fa-trash" aria-hidden="true"></i></button>
       </div>`;
@@ -125,10 +124,15 @@ btnEnvoyerFormulaire.addEventListener("click", (Element) => {
   if (controlPrenom()) {
     //mettre dans le local storage
     localStorage.setItem("valeursForm", JSON.stringify(valeursForm));
+    localStorage.setItem("prixTotal", JSON.stringify(priceTotal));
   } else {
     alert("Veuillez bien remplir le formulaire");
   }
-  const productsId = productInLocalStorage[productId];
+  let productsIds = []
+  productInLocalStorage.forEach((productInLocalStorage)=> {
+  productsIds.push(productInLocalStorage.productId);
+})
+
   // infos à envoyer vers le serveur
   const order = {
     contact:{
@@ -138,18 +142,24 @@ btnEnvoyerFormulaire.addEventListener("click", (Element) => {
       address:valeursForm.address,
       email:valeursForm.email,
     },
-    productsId: productsId,
+    products: productsIds,
   };
-  console.log(order);
   //envoi vers le server
-  const promise01 = fetch("http://localhost:3000/api/cameras/order",{
-    method: "POST",
+  const requestOptions = {
+    method: 'POST',
     body: JSON.stringify(order),
-    headers:{
-      "content-Type": "application/json",
-    },
-    
-  });
-  
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+  }
+  fetch(`http://localhost:3000/api/cameras/order`, requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+          localStorage.setItem("orderId", data.orderId);
+          window.location = "confirmation.html";
+        })
+         // je redirige vers la page de confirmation de commande par exemple en récupérant le numéro de commande à afficher
 
+        .catch((error) => {
+          alert("Oups, l'erreur suivante a été remontée : "+error);
+        })
 });
