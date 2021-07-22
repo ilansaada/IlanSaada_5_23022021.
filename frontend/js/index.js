@@ -1,3 +1,4 @@
+//appel à l'API fetch avec la méthode globale fetch() afin de récupérer des ressources à travers le réseau de manière asynchrone.
 fetch("http://localhost:3000/api/cameras")
   .then((data) => data.json())
   .then((jsonListProduct) => {

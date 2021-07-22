@@ -111,13 +111,14 @@ btnEnvoyerFormulaire.addEventListener("click", (Element) => {
 
   //validation du form
   function controlPrenom() {
-    // controle de la validation du prenom
+    // controle de la validation du prenom avec RegExs.
     const theName = valeursForm.firstName;
-    if (/^[A-Za-z]{3,20}$/.test(theName)){
+    if (/^[A-Za-z]{3,20}$/.test(theName)) {
       return true;
     } else {
       alert("erreur dans les informations saisies");
-      document.querySelector("#champManquant").textContent = "Veuillez remplir correctement ce champ avant d'envoyer le formulaire";
+      document.querySelector("#champManquant").textContent =
+        "Veuillez remplir correctement ce champ avant d'envoyer le formulaire";
       return false;
     }
   }
@@ -128,38 +129,37 @@ btnEnvoyerFormulaire.addEventListener("click", (Element) => {
   } else {
     alert("Veuillez bien remplir le formulaire");
   }
-  let productsIds = []
-  productInLocalStorage.forEach((productInLocalStorage)=> {
-  productsIds.push(productInLocalStorage.productId);
-})
+  let productsIds = [];
+  productInLocalStorage.forEach((productInLocalStorage) => {
+    productsIds.push(productInLocalStorage.productId);
+  });
 
   // infos à envoyer vers le serveur
   const order = {
-    contact:{
-      firstName:valeursForm.firstName,
-      lastName:valeursForm.lastName,
-      city:valeursForm.city,
-      address:valeursForm.address,
-      email:valeursForm.email,
+    contact: {
+      firstName: valeursForm.firstName,
+      lastName: valeursForm.lastName,
+      city: valeursForm.city,
+      address: valeursForm.address,
+      email: valeursForm.email,
     },
     products: productsIds,
   };
   //envoi vers le server
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(order),
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
-  }
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+  };
   fetch(`http://localhost:3000/api/cameras/order`, requestOptions)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data)
-          localStorage.setItem("orderId", data.orderId);
-          window.location = "confirmation.html";
-        })
-         // je redirige vers la page de confirmation de commande par exemple en récupérant le numéro de commande à afficher
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      localStorage.setItem("orderId", data.orderId);
+      window.location = "confirmation.html";
+    })
 
-        .catch((error) => {
-          alert("Oups, l'erreur suivante a été remontée : "+error);
-        })
+    .catch((error) => {
+      alert("erreur" +error);
+    });
 });

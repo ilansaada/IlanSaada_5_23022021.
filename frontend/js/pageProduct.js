@@ -28,9 +28,8 @@ fetch(`http://localhost:3000/api/cameras/${id}`)
                 </form>
                 <button id="btn" type="submit">Ajouter au panier</button>
             </div>`;
-    //le panier
     //récuperation des données séléctionnées par l'utilisateur
-    //récuperations des valeurs du formulaire
+    //récuperations des valeurs du choix de focale
 
     //selection du btn
     const btn_envoyer = document.querySelector("#btn");
@@ -72,7 +71,6 @@ fetch(`http://localhost:3000/api/cameras/${id}`)
         productInLocalStorage = [];
         productInLocalStorage.push(optionProduit);
         localStorage.setItem("product", JSON.stringify(productInLocalStorage));
-        console.log(productInLocalStorage);
         popupconfirmation();
       }
     });
