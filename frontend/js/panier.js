@@ -1,23 +1,23 @@
 //variable productInLocalStorage dans laquelle on met les keys et les values qui sont dans le local storage
 let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
 
-//affichage des produits du panier
-const affichagePannier = document.querySelector("#container_panier");
+/*----------------------------------affichage des produits du panier----------------------------------*/
+const displayBasket = document.querySelector("#container_panier");
 
 // si le panier est vide
 if (productInLocalStorage === null || productInLocalStorage == 0) {
-  const panierVide = `
+  const basketEmpty = `
     <div class ="container_panier_vide">
         <div>Votre panier est tristement vide. </div>
     </div>
     `;
-  affichagePannier.innerHTML = panierVide;
+  displayBasket.innerHTML = basketEmpty;
 } else {
-  let produitPanier = [];
+  let productBasket = [];
 
   for (j = 0; j < productInLocalStorage.length; j++) {
-    produitPanier =
-      produitPanier +
+    productBasket =
+      productBasket +
       `
       <div class="container_panier_resume">
         <div class="container_panier_resume_details">Quantité 1 - ${productInLocalStorage[j].nomProduit}  Option : ${productInLocalStorage[j].option_Produit}</div>
@@ -26,16 +26,15 @@ if (productInLocalStorage === null || productInLocalStorage == 0) {
       </div>`;
   }
   if (j === productInLocalStorage.length) {
-    affichagePannier.innerHTML = produitPanier;
+    displayBasket.innerHTML = productBasket;
   }
 }
 
-//gestion de l'icone supprimer l'article
-//selection des btn supprimer
-let btn_supprimer = document.querySelectorAll(".btn_supprimer");
+/*----------------------------------gestion de l'icone supprimer l'article----------------------------------*/
+let btnSupp = document.querySelectorAll(".btn_supprimer");
 
-for (let k = 0; k < btn_supprimer.length; k++) {
-  btn_supprimer[k].addEventListener("click", (Event) => {
+for (let k = 0; k < btnSupp.length; k++) {
+  btnSupp[k].addEventListener("click", (Event) => {
     Event.preventDefault();
     //sélection de l'id du produit qui sera supprimer
     let id_suppression = productInLocalStorage[k].nomProduit;
@@ -51,7 +50,7 @@ for (let k = 0; k < btn_supprimer.length; k++) {
   });
 }
 
-//Montant total du panier
+/*-----------------------------------Montant total du panier-----------------------------------*/
 let priceTotalCalcul = [];
 //chercher les prix dans le panier
 for (let l = 0; l < productInLocalStorage.length; l++) {
@@ -66,41 +65,13 @@ const priceTotal = priceTotalCalcul.reduce(reducer, 0);
 const affichagePrice = `<div class="total_commande">
   Le prix total de votre commande est de :  ${priceTotal} €
 </div>`;
-affichagePannier.insertAdjacentHTML("beforeend", affichagePrice);
+displayBasket.insertAdjacentHTML("beforeend", affichagePrice);
 
-//Formulaire
-const affichageformulairePannier = () => {
-  const affichageForm = document.querySelector("#container_panier");
-  const structureformulaire = `<div id="formulaire_commande">
-  <h2>Formulaire à remplir pour la commande</h2> 
-  <form>
-    <label for="name">Prénom</label><span id="champManquant" class"champsManquants"></span>
-    <input type="text" id="name" name="name" required> 
-    
-    <label for="last_name">Nom</label>
-    <input type="text" id="last_name" name="last_name" required> 
-    
-    <label for="adresse">Adresse</label>
-    <textarea id="adresse" name="adresse" required></textarea>
-    
-    <label for="ville">Ville</label>
-    <input type="text" id="ville" name="ville" required> 
-    
-    <label for="email">E-mail</label>
-    <input type="text" id="email" name="email" required> 
-    <button id="envoyer_formulaire" type="submit" name="envoyer_formulaire">Confirmation de la commande</button>
-    </form>
-</div>`;
-  affichageForm.insertAdjacentHTML("afterend", structureformulaire);
-};
-//affichage du formulaire
-affichageformulairePannier();
-//selection du btn envoyer formulaire
+/*-----------------------------------ecouter le btn envoyer formulaire-----------------------------------*/
 const btnEnvoyerFormulaire = document.querySelector("#envoyer_formulaire");
-//ecouter le btn envoyer formulaire
 btnEnvoyerFormulaire.addEventListener("click", (Element) => {
   Element.preventDefault();
-  //recuperation des valeurs du form
+  //recuperation des valeurs du formulaire
   const valeursForm = {
     firstName: document.querySelector("#name").value,
     lastName: document.querySelector("#last_name").value,
@@ -109,57 +80,80 @@ btnEnvoyerFormulaire.addEventListener("click", (Element) => {
     email: document.querySelector("#email").value,
   };
 
-  //validation du form
+  /*-----------------------------------validation du form-----------------------------------*/
+  const regExPrenomNomVille =(value)=>{
+    return /^[A-Za-z]{3,20}$/.test(value)
+
+  };
+  const regExAdresseEmail =(value)=>{
+    return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
+
+  };
   function controlPrenom() {
     // controle de la validation du prenom avec RegExs.
     const theName = valeursForm.firstName;
-    if (/^[A-Za-z]{3,20}$/.test(theName)) {
+    if (regExPrenomNomVille(theName)) {
       return true;
     } else {
-      alert("erreur dans les informations saisies");
-      document.querySelector("#champManquant").textContent =
-        "Veuillez remplir correctement ce champ avant d'envoyer le formulaire";
       return false;
     }
   }
-  if (controlPrenom()) {
-    //mettre dans le local storage
+  function controlNom() {
+    // controle de la validation du nom avec RegExs.
+    const theLastName = valeursForm.lastName;
+    if (regExPrenomNomVille(theLastName)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function controlEmail() {
+    // controle de la validation de l'email avec RegExs.
+    const theEmail = valeursForm.email;
+    console.log(theEmail);
+    if (regExAdresseEmail(theEmail)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  /*----------------------------------- si le formulaire est bon le mettre dans le local storage-----------------------------------*/
+  if (controlPrenom() && controlNom() && controlEmail()) {
     localStorage.setItem("valeursForm", JSON.stringify(valeursForm));
     localStorage.setItem("prixTotal", JSON.stringify(priceTotal));
-  } else {
-    alert("Veuillez bien remplir le formulaire");
-  }
-  let productsIds = [];
-  productInLocalStorage.forEach((productInLocalStorage) => {
-    productsIds.push(productInLocalStorage.productId);
-  });
-
-  // infos à envoyer vers le serveur
-  const order = {
-    contact: {
-      firstName: valeursForm.firstName,
-      lastName: valeursForm.lastName,
-      city: valeursForm.city,
-      address: valeursForm.address,
-      email: valeursForm.email,
-    },
-    products: productsIds,
-  };
-  //envoi vers le server
-  const requestOptions = {
-    method: "POST",
-    body: JSON.stringify(order),
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-  };
-  fetch(`http://localhost:3000/api/cameras/order`, requestOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      localStorage.setItem("orderId", data.orderId);
-      window.location = "confirmation.html";
-    })
-
-    .catch((error) => {
-      alert("erreur" +error);
+    /*-----------------------------------infos à envoyer vers le serveur-----------------------------------*/
+    let productsIds = [];
+    productInLocalStorage.forEach((productInLocalStorage) => {
+      productsIds.push(productInLocalStorage.productId);
     });
+    const order = {
+      contact: {
+        firstName: valeursForm.firstName,
+        lastName: valeursForm.lastName,
+        city: valeursForm.city,
+        address: valeursForm.address,
+        email: valeursForm.email,
+      },
+      products: productsIds,
+    };
+    /*-----------------------------------envoi vers le server-----------------------------------*/
+    const requestOptions = {
+      method: "POST",
+      body: JSON.stringify(order),
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+    };
+    fetch(`http://localhost:3000/api/cameras/order`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.setItem("orderId", data.orderId);
+        window.location = "confirmation.html";
+      })
+
+      .catch((error) => {
+        alert("erreur" + error);
+      });
+  } else {
+    document.querySelector("#erreur").textContent =
+        "Tout les champs doivent etre correctement remplis avant d'envoyer le formulaire  notamment : prenom,  nom et ville : pas de caractères spéciaux ";
+  }
 });

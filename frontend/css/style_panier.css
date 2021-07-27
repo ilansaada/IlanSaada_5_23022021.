@@ -18,6 +18,8 @@ main{
    }
    h2{
        font-size: 30px;
+       padding: 10px;
+       margin: 0px;
    }
    h4{
        margin: 0px;
@@ -76,7 +78,9 @@ main{
    .total_commande{
     margin-top: 40px;
 }
-
+.champManquant{
+    color: rgb(238, 13, 13);
+}
 #formulaire_commande{
     margin-top: 10px;
     border: solid;
@@ -86,6 +90,7 @@ main{
     margin: 20px;
 }
 form{
+    padding: 20px;
     background-color: #ecb7b7;
     display: flex;
     flex-direction: column;
